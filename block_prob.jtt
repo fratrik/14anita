@@ -1,0 +1,28 @@
+app.numPeriods = app.session.decisionSituations.length;
+app.groupSize = 1;
+
+let stage = app.newStage('hello');
+stage.playerStart = function(player) {
+    let sit = player.period().id-1;
+    let situation = app.session.decisionSituations[player.participant.decSitSequence[sit]];
+    player.situation = situation;
+}
+stage.activeScreen = `
+<p>Choose a number:</p>
+<b>0</b> <input id="slider" type="range" name='player.slider' min="0" max="100" step="1" oninput="showSliderVal(this.value)" onchange="showSliderVal(this.value)"> <b>100</b><br>
+<span>Current Slider Value: <span id="sliderVal">-</span></span>
+<br><br>
+<script>
+let s = document.createElement("style");
+document.head.appendChild(s);
+showSliderVal = function(val) {
+    s.textContent = "#slider::-webkit-slider-thumb{max-width: 20px}"
+    $("#sliderVal").text(val);
+}
+</script>
+<style>
+input[type=range]::-webkit-slider-thumb {
+    max-width: 0px;
+}
+</style>
+`

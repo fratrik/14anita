@@ -1,0 +1,103 @@
+app.numPeriods = app.session.decisionSituations.length * 2;
+app.groupSize = 1;
+
+let stage = app.newStage('decide');
+stage.playerStart = function(player) {
+    let sit = Math.floor((player.period().id-1)/2);
+    let situation = app.session.decisionSituations[player.participant.decSitSequence[sit]];
+    player.situation = situation;
+    let storeNext = false;
+    if (player.participant.useA == null) {
+        player.participant.useA = Math.random() < 0.5;
+        storeNext = true;
+    } 
+    player.option = player.participant.useA ? situation.optionA : situation.optionB;
+    player.participant.useA = !player.participant.useA;
+    if (!storeNext) {
+        player.participant.useA = null;
+    }
+    player.switchRow = -1;
+    player.previewSwitchRow = -1;
+    player.switchToBTokens = -1;
+}
+stage.activeScreen = `
+    <div>IMAGE</div>
+    <table style='font-size: 14pt; border-spacing: 0px;'>
+        <tr style='background-color: #AAA'>
+            <th>Option A</th>
+            <th>Option B</th>
+            <th>Switch-to-B column</th>
+        </tr>
+        <tr v-for='(alternative, key) in player.option.alternativesList'>
+            <td
+                class='option'
+                v-bind:class="{
+                    red: player.switchRow != -1 && player.switchRow > key,
+                    fontRed: player.previewSwitchRow != -1 && player.previewSwitchRow > key
+                }" 
+                onmouseenter='hoverRow(this)'
+                onmouseleave='clearPreview()'
+                onclick='clickRow(this)'
+            >
+                {{player.option.text}}
+            </td>
+            <td 
+                class='option'
+                v-bind:class="{
+                    blue: player.switchRow != -1 && player.switchRow <= key,
+                    fontBlue: player.previewSwitchRow != -1 && player.previewSwitchRow <= key
+                }" 
+                onmouseenter='hoverRow(this)'
+                onmouseleave='clearPreview()'
+                onclick='clickRow(this)'
+            >
+                {{alternative}} tokens for sure
+            </td>
+            <td><input type='radio' name='player.switchRow' value='alternative' :checked='player.switchRow == key' :onclick='"setRow(" + key + ")"'></td>
+        </tr>
+    </table>
+    <div>Choice: {{player.switchRow}}</div>
+    <div>Switch-to-B Tokens: {{player.switchToBTokens}}</div>
+    <script>
+    clickRow = function(target) {
+        let row = target.parentElement;
+        setRow(row.rowIndex-1 + (1-target.cellIndex));
+    }
+    hoverRow = function(target) {
+        let row = target.parentElement;
+        jt.vue.player.previewSwitchRow = row.rowIndex-1 + (1-target.cellIndex);
+    }
+    clearPreview = function() {
+        jt.vue.player.previewSwitchRow = -1;
+    }
+    setRow = function(x) {
+        jt.vue.player.switchRow = x;
+        jt.vue.player.switchToBTokens = 'unknown';
+        if (x < jt.vue.player.option.alternativesList.length) {
+            jt.vue.player.switchToBTokens = jt.vue.player.option.alternativesList[x];
+        }
+    }
+    </script>
+    <style>
+        td.option {
+            padding: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        td.option:hover {
+            border: 2px solid #000;
+        }
+        .red {
+            background-color: rgba(255, 0, 0, 0.4);
+        }
+        .fontRed {
+            color: red;
+        }
+        .blue {
+            background-color: rgba(0, 0, 255, 0.4);
+        }
+        .fontBlue {
+            color: blue;
+        }
+    </style>
+`

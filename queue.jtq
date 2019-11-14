@@ -1,0 +1,97 @@
+session.addApp('block_list.jtt');
+session.addApp('block_prob.jtt');
+session.addApp('block_AorB.jtt');
+session.addApp('block_reviewAorB.jtt');
+session.addApp('block_prob.jtt');
+session.addApp('survey.jtt');
+session.addApp('results.jtt');
+
+session.decisionSituations = [
+    {
+        optionA: {
+            text: '[20, 20, 180, 180]',
+            alternatives: {
+                min: 20,
+                max: 180,
+                step: 5
+            }
+        },
+        optionB: {
+            text: '[64, 90, 90, 112]',
+            alternatives: {
+                min: 60,
+                max: 115,
+                step: 5
+            }
+        },
+    },
+    {
+        optionA: {
+            text: 'Chocolate bar 1',
+            alternatives: {
+                min: 0,
+                max: 50,
+                step: 5
+            }
+        },
+        optionB: {
+            text: 'Chocolate bar 2',
+            alternatives: {
+                min: 0,
+                max: 50,
+                step: 5
+            }
+        },
+    },
+    {
+        optionA: {
+            text: '[94, 94, 94, 94]',
+            alternatives: {
+                min: 90,
+                max: 96,
+                step: 1
+            }
+        },
+        optionB: {
+            text: '[94, 94, 96, 96]',
+            alternatives: {
+                min: 90,
+                max: 96,
+                step: 1
+            }
+        },
+    }
+]
+
+for (let i in session.decisionSituations) {
+    let sit = session.decisionSituations[i];
+    let AB = ['A', 'B'];
+    for (let x in AB) {
+        let option = sit['option' + AB[x]];
+        let alts = option.alternatives;
+        option.alternativesList = [];
+        for (let i=alts.min; i<=alts.max; i+=alts.step) {
+            option.alternativesList.push(i);
+        }
+    }
+}
+
+session.participantStart = function(participant) {
+    let session = participant.session;
+    let sequence = [0, 1, 2];    
+    let x = Utils.shuffle(sequence);
+    let indexOf2 = x.indexOf(2);
+    x.splice(indexOf2+1, 0, 3);
+    x.push(4);
+    x.push(5);
+    x.push(6);
+    participant.appSequence = x;
+    participant.decSitSequence = Utils.shuffle([0, 1, 2]);
+
+    // TODO: remove
+    participant.appSequence = [0, 1, 2, 3, 4, 5, 6];
+}
+
+session.getApp = function(participant) {
+    return session.apps[participant.appSequence[participant.appIndex-1]];
+}
