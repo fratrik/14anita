@@ -14,7 +14,8 @@ session.decisionSituations = [
                 min: 20,
                 max: 180,
                 step: 5
-            }
+            },
+            filename: 'decSit1A.jpg'
         },
         optionB: {
             text: '[64, 90, 90, 112]',
@@ -22,7 +23,8 @@ session.decisionSituations = [
                 min: 60,
                 max: 115,
                 step: 5
-            }
+            },
+            filename: 'decSit1B.jpg'
         },
     },
     {
@@ -32,7 +34,8 @@ session.decisionSituations = [
                 min: 0,
                 max: 50,
                 step: 5
-            }
+            },
+            filename: 'decSit2A.jpg'
         },
         optionB: {
             text: 'Chocolate bar 2',
@@ -40,7 +43,8 @@ session.decisionSituations = [
                 min: 0,
                 max: 50,
                 step: 5
-            }
+            },
+            filename: 'decSit2B.jpg'
         },
     },
     {
@@ -50,7 +54,8 @@ session.decisionSituations = [
                 min: 90,
                 max: 96,
                 step: 1
-            }
+            },
+            filename: 'decSit3A.jpg'
         },
         optionB: {
             text: '[94, 94, 96, 96]',
@@ -58,7 +63,8 @@ session.decisionSituations = [
                 min: 90,
                 max: 96,
                 step: 1
-            }
+            },
+            filename: 'decSit3B.jpg'
         },
     }
 ]
