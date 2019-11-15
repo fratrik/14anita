@@ -9,11 +9,34 @@ stage.playerStart = function(player) {
     let sit = Math.floor((player.period().id-1)/10);
     let situation = app.session.decisionSituations[player.participant.decSitSequence[sit]];
     player.situation = situation;
+    if (Math.random() < 0.5) {
+        player.left = player.situation.optionA;
+        player.right = player.situation.optionB;
+    } else {
+        player.left = player.situation.optionB;
+        player.right = player.situation.optionA;
+    }
+    player.selectedOption = -1;
 }
 stage.activeScreen = `
-<div style='display: flex;'>
-    <img :src='"14anita/" + player.situation.optionA.filename' width='300' height='300'>
-    <div>OK</div>
-    <img :src='"14anita/" + player.situation.optionB.filename' width='300' height='300'>
+<div style='display: flex; align-items: center'>
+    <img :src='"14anita/images/" + player.left.filename' width='300' height='300' onclick='selectOption(this)' :data-option='player.left'>
+    <button :disabled='player.selectedOption == -1' style='margin: 20px'>OK</button>
+    <img :src='"14anita/images/" + player.right.filename' width='300' height='300' onclick='selectOption(this)' :data-option='player.right'>
 </div>
+<script>
+selectOption = function(el) {
+    jt.vue.player.selectedOption = el.dataset.option.text;
+    $('img').removeClass('selected');
+    el.classList.add('selected');
+}
+</script>
+<style>
+img {
+    border: 4px solid transparent;
+}
+.selected {
+    border: 4px solid blue;
+}
+</style>
 ` 
