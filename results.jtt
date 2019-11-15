@@ -1,1 +1,7 @@
-app.newStage('hello');
+let stage = app.newStage('results');
+stage.activeScreen = `
+    <h4>Payoffs</h4>
+    <div v-for='(payoff, key) in participant.payoffs'>
+    {{key+1}}. {{payoff}}.
+    </div>
+`

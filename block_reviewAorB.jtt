@@ -1,1 +1,41 @@
-app.newStage('hello');
+app.numPeriods = 2;
+app.groupSize = 1;
+
+let stage = app.newStage('hello');
+stage.playerStart = function(player) {
+    let block = player.participant.reviewSequence[player.period().id-1]; // 0, 1 or 2
+    // This block always follows Block 3. So the last 30 players on the participant represent players from Block 3.
+    player.choiceLetters = '';
+    let start = player.participant.players.length-1 - 10*(3-block) - (player.period().id - 1);
+    for (let i=start; i<start+10; i++) {
+        player.choiceLetters += player.participant.players[i].selectedOptionLetter;
+    }
+    player.situation = player.participant.players[start].situation;
+}
+stage.playerEnd = function(player) {
+    if (player.change == 'allA') {
+        player.choiceLetters = 'AAAAAAAAAA';
+    } else if (player.change == 'allB') {
+        player.choiceLetters = 'BBBBBBBBBB';
+    } 
+
+    let period = Utils.randomInt(0, 10);
+    player.payoff = player.choiceLetters[period] == 'A' ? player.situation.optionA.text : player.situation.optionB.text;
+
+    if (player.period().id == app.numPeriods) {
+        let round = Utils.randomInt(0, app.numPeriods);
+        let drawnPlayer = player.participant.players[player.participant.players.length-1 - app.numPeriods + round];
+        player.participant.payoffs.push(drawnPlayer.payoff);
+    }
+}
+stage.activeScreen = `
+<h3>Review your choices from Block 3</h3>
+<p>Option A: {{player.situation.optionA.text}}</p>
+<p>Option B: {{player.situation.optionB.text}}</p>
+<p>Your choices: {{player.choiceLetters}}</p>
+<div>
+    <button name='player.change' value='allA'>All A</button>
+    <button name='player.change' value='allB'>All B</button>
+    <button name='player.change' value='noChange'>No changes</button>
+</div>
+`

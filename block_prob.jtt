@@ -8,19 +8,20 @@ stage.playerStart = function(player) {
     let sit = player.period().id-1;
     let situation = app.session.decisionSituations[player.participant.decSitSequence[sit]];
     player.situation = situation;
+    player.slider = -1;
 }
 stage.activeScreen = `
 <p>Choose a probability:</p>
 <div style='display: flex; width: 100%'>
     <img :src='"14anita/images/" + player.situation.optionA.filename'>
-    <span style='flex: 1 1 200px'></span>
+    <span style='flex: 1 0 400px'></span>
     <img :src='"14anita/images/" + player.situation.optionB.filename'>
 </div>
 
 <div style='display: flex; width: 100%'>
-    <span style='flex: 1 1 200px'><b>{{player.situation.optionA.text}}</b></span>
-    <span style='flex: 1 1 200px'></span>
-    <span style='flex: 1 1 200px; text-align: right'><span><b>{{player.situation.optionB.text}}</b></span>
+    <span style='flex: 0 0 200px'><b>{{player.situation.optionA.text}}</b></span>
+    <span style='flex: 1 0 400px'></span>
+    <span style='flex: 0 0 200px; text-align: right'><span><b>{{player.situation.optionB.text}}</b></span>
 </div>
 <div style='width: 80%; padding-left: 10%; padding-right: 10%'>
     <input 
@@ -45,7 +46,7 @@ stage.activeScreen = `
             onchange="showSliderVal(this.value)"
         >
     </span>
-    <span style='min-width: 500px'></span>
+    <span style='flex: 1 1 500px'></span>
     <span style='width: 70px'>
         <input 
             id='optionBInput' 
@@ -58,7 +59,7 @@ stage.activeScreen = `
     </span>
 </div>
 <div style='width: 100%; display: flex; justify-content: center'>
-<button>OK</button>
+<button :disabled='player.slider == -1'>OK</button>
 </div>
 <script>
 let s = document.createElement("style");
@@ -70,6 +71,7 @@ showSliderVal = function(val) {
     let y = (1000-x)/10;
     $("#optionBInput").val(y);
     document.getElementById('slider').value = val;
+    jt.vue.player.slider = val;
 }
 
 jt.connected = function() {
@@ -82,5 +84,35 @@ jt.connected = function() {
 input[type=range]::-webkit-slider-thumb {
     max-width: 0px;
 }
+body {
+    max-width: unset;
+}
+#jtree {
+    width: 90%;
+}
 </style>
 `
+
+stage.autoplay = `
+    if (jt.vue.player.slider == -1) {
+        let x = Math.floor(Math.random()*101);
+        showSliderVal(x);
+    } else {
+        $('form').submit();
+    }
+`
+
+stage.playerEnd = function(player) {
+    player.draw = Math.random()*100;
+    if (player.draw <= player.slider) {
+        player.payoff = player.situation.optionA.text;
+    } else {
+        player.payoff = player.situation.optionB.text;
+    }
+
+    if (player.period().id == app.numPeriods) {
+        let round = Utils.randomInt(0, app.numPeriods);
+        let drawnPlayer = player.participant.players[player.participant.players.length-1 - app.numPeriods + round];
+        player.participant.payoffs.push(drawnPlayer.payoff);
+    }
+}

@@ -12,23 +12,47 @@ stage.playerStart = function(player) {
     if (Math.random() < 0.5) {
         player.left = player.situation.optionA;
         player.right = player.situation.optionB;
+        player.left.letter = 'A';
+        player.right.letter = 'B';
     } else {
         player.left = player.situation.optionB;
         player.right = player.situation.optionA;
+        player.left.letter = 'B';
+        player.right.letter = 'A';
     }
     player.selectedOption = -1;
+    player.selectedOptionLetter = -1;
 }
+
+stage.playerEnd = function(player) {
+    if (player.period().id == app.numPeriods) {
+        let round = Utils.randomInt(0, app.numPeriods);
+        let drawnPlayer = player.participant.players[player.participant.players.length-1 - app.numPeriods + round];
+        player.participant.payoffs.push(drawnPlayer.selectedOption);
+    }
+}
+
 stage.activeScreen = `
 <div style='display: flex; align-items: center'>
-    <img :src='"14anita/images/" + player.left.filename' width='300' height='300' onclick='selectOption(this)' :data-option='player.left'>
+    <img :src='"14anita/images/" + player.left.filename' width='300' height='300' onclick='selectOption(this)' :data-optiontext='player.left.text' :data-optionletter='player.left.letter'>
     <button :disabled='player.selectedOption == -1' style='margin: 20px'>OK</button>
-    <img :src='"14anita/images/" + player.right.filename' width='300' height='300' onclick='selectOption(this)' :data-option='player.right'>
+    <img :src='"14anita/images/" + player.right.filename' width='300' height='300' onclick='selectOption(this)' :data-optiontext='player.right.text' :data-optionletter='player.right.letter'>
+    <input id='choice' style='z-index: -10; position: absolute' name='player.selectedOption'>
+    <input id='choiceLetter' style='z-index: -10; position: absolute' name='player.selectedOptionLetter'>
 </div>
 <script>
+jt.connected = function() {
+    jt.socket.on('playerUpdate', function(player) {
+        $('img').removeClass('selected');
+    });
+}
 selectOption = function(el) {
-    jt.vue.player.selectedOption = el.dataset.option.text;
+    jt.vue.player.selectedOption = el.dataset.optiontext;
+    jt.vue.player.selectedOptionLetter = el.dataset.optionletter;
     $('img').removeClass('selected');
     el.classList.add('selected');
+    document.getElementById('choice').value = jt.vue.player.selectedOption;
+    document.getElementById('choiceLetter').value = jt.vue.player.selectedOptionLetter;
 }
 </script>
 <style>
@@ -40,3 +64,11 @@ img {
 }
 </style>
 ` 
+
+stage.autoplay = `
+    if (jt.vue.player.selectedOption == -1) {
+        selectOption($('img')[Math.random() < 0.5 ? 0 : 1]);
+    } else {
+        $('form').submit();
+    }
+`

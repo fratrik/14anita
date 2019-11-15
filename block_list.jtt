@@ -57,11 +57,13 @@ stage.activeScreen = `
             >
                 {{alternative}} tokens for sure
             </td>
-            <td><input type='radio' name='player.switchRow' value='alternative' :checked='player.switchRow == key' :onclick='"setRow(" + key + ")"'></td>
+            <td><input type='radio' required name='player.switchRow' :value='alternative' :checked='player.switchRow == key' :onclick='"setRow(" + key + ")"'></td>
         </tr>
+        <input type='radio' required name='player.switchRow' hidden :value='unknown' :checked='player.switchRow == player.option.alternativesList.length'>
     </table>
     <div>Choice: {{player.switchRow}}</div>
     <div>Switch-to-B Tokens: {{player.switchToBTokens}}</div>
+    <button :disabled='player.switchRow == -1'>OK</button>
     <script>
     clickRow = function(target) {
         let row = target.parentElement;
@@ -104,4 +106,29 @@ stage.activeScreen = `
             color: blue;
         }
     </style>
+`
+stage.playerEnd = function(player) {
+    player.draw = Math.floor(Math.random()*(player.option.alternativesList.length+1));
+    if (player.draw > player.switchRow) {
+        player.payoff = player.option.alternativesList[player.draw] + ' tokens';
+    } else {
+        player.payoff = player.option.text;
+    }
+
+    if (player.period().id == app.numPeriods) {
+        let round = Utils.randomInt(0, app.numPeriods);
+        let x = player.participant.players.length-1 - app.numPeriods + round;
+        console.log(player.participant.players.length + ', ' + x);
+        let drawnPlayer = player.participant.players[x];
+        player.participant.payoffs.push(drawnPlayer.payoff);
+    }
+}
+
+stage.autoplay = `
+    if (jt.vue.player.switchRow == -1) {
+        let x = Math.floor(Math.random()*(jt.vue.player.option.alternativesList.length+1));
+        setRow(x)
+    } else {
+        $('form').submit();
+    }
 `
