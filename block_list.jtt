@@ -22,6 +22,9 @@ stage.playerStart = function(player) {
     player.switchRow = -1;
     player.previewSwitchRow = -1;
     player.switchToBTokens = -1;
+    if (player.period().id === 1) {
+        player.participant.latestPayoffs = [];
+    }
 }
 stage.activeScreen = `
     <img :src='"14anita/images/" + player.option.filename'>
@@ -59,7 +62,7 @@ stage.activeScreen = `
             </td>
             <td><input type='radio' required name='player.switchRow' :value='alternative' :checked='player.switchRow == key' :onclick='"setRow(" + key + ")"'></td>
         </tr>
-        <input type='radio' required name='player.switchRow' hidden :value='unknown' :checked='player.switchRow == player.option.alternativesList.length'>
+        <input type='radio' required name='player.switchRow' hidden value='unknown' :checked='player.switchRow == player.option.alternativesList.length'>
     </table>
     <div>Choice: {{player.switchRow}}</div>
     <div>Switch-to-B Tokens: {{player.switchToBTokens}}</div>
@@ -115,12 +118,14 @@ stage.playerEnd = function(player) {
         player.payoff = player.option.text;
     }
 
+    player.participant.latestPayoffs.push(player.payoff);
     if (player.period().id == app.numPeriods) {
         let round = Utils.randomInt(0, app.numPeriods);
-        let x = player.participant.players.length-1 - app.numPeriods + round;
-        console.log(player.participant.players.length + ', ' + x);
-        let drawnPlayer = player.participant.players[x];
-        player.participant.payoffs.push(drawnPlayer.payoff);
+        let drawnPayoff = player.participant.latestPayoffs[round];
+        player.participant.payoffs.push({
+            round: round,
+            payoff: drawnPayoff
+        });
     }
 }
 

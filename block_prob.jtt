@@ -9,6 +9,9 @@ stage.playerStart = function(player) {
     let situation = app.session.decisionSituations[player.participant.decSitSequence[sit]];
     player.situation = situation;
     player.slider = -1;
+    if (player.period().id === 1) {
+        player.participant.latestPayoffs = [];
+    }
 }
 stage.activeScreen = `
 <p>Choose a probability:</p>
@@ -110,9 +113,13 @@ stage.playerEnd = function(player) {
         player.payoff = player.situation.optionB.text;
     }
 
+    player.participant.latestPayoffs.push(player.payoff);
     if (player.period().id == app.numPeriods) {
         let round = Utils.randomInt(0, app.numPeriods);
-        let drawnPlayer = player.participant.players[player.participant.players.length-1 - app.numPeriods + round];
-        player.participant.payoffs.push(drawnPlayer.payoff);
+        let drawnPayoff = player.participant.latestPayoffs[round];
+        player.participant.payoffs.push({
+            round: round, 
+            payoff: drawnPayoff
+        });
     }
 }

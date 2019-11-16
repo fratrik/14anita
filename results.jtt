@@ -1,7 +1,17 @@
 let stage = app.newStage('results');
+stage.playerStart = function(player) {
+    player.chosenBlock = Utils.randomInt(0, player.participant.payoffs.length);
+    player.points = player.participant.payoffs[player.chosenBlock].payoff;
+}
+stage.addOKButtonIfNone = false;
 stage.activeScreen = `
-    <h4>Payoffs</h4>
-    <div v-for='(payoff, key) in participant.payoffs'>
-    {{key+1}}. {{payoff}}.
+    <h4>Payoffs per Block</h4>
+    <div v-for='(payoffObj, key) in participant.payoffs'>
+        {{key+1}}. {{payoffObj.payoff}} (Round {{payoffObj.round+1}}).
     </div>
+    <h4>Final Payoff</h4>
+    <div>{{player.points}} (Block {{player.chosenBlock+1}}).
+    <br><br>
+    <div>Please wait for the experiment to continue.</div>
+
 `
