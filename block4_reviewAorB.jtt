@@ -69,11 +69,11 @@ stage.activeScreen = `
 <div style='display: flex; align-items: center'>
     <div style='flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; margin: 50px'>
         <img :src='"14anita/images/" + player.left.filename' width='600'>
-        <p>Option A: {{player.left.text}}</p>
+        <p>Option A</p>
     </div>
     <div style='flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; margin: 50px'>
         <img :src='"14anita/images/" + player.right.filename' width='600'>
-        <p>Option B: {{player.right.text}}</p>
+        <p>Option B</p>
     </div>
     <input id='choice' style='z-index: -10; position: absolute' name='player.selectedOption'>
     <input id='choiceLetter' style='z-index: -10; position: absolute' name='player.selectedOptionLetter'>

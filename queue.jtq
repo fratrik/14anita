@@ -9,6 +9,7 @@ session.addApp('results.jtt');
 session.decisionSituations = [
     {
         name: 'HardLottery',
+        showImageForPrefInt: false,
         optionA: {
             text: '[20, 20, 180, 180]',
             alternatives: {
@@ -30,6 +31,7 @@ session.decisionSituations = [
     },
     {
         name: 'ChocolateBars',
+        showImageForPrefInt: true,
         optionA: {
             text: 'Chocolate bar 1',
             alternatives: {
@@ -51,6 +53,7 @@ session.decisionSituations = [
     },
     {
         name: 'EasyLottery',
+        showImageForPrefInt: false,
         optionA: {
             text: '[94, 94, 94, 94]',
             alternatives: {

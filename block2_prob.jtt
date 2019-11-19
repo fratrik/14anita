@@ -66,17 +66,9 @@ stage.activeScreen = `
 <button :disabled='player.slider == -1'>OK</button>
 </div>
 <script>
-let s = document.createElement("style");
-document.head.appendChild(s);
 showSliderVal = function(val) {
-    s.textContent = \`
-#slider::-webkit-slider-thumb{
-    max-width: 20px
-}
-input[type=range]::-moz-range-thumb {
-    width: 10px;
-}
-\`;
+    jt.sliderSet = true;
+    clearInterval(jt.sliderTimer);
     $("#optionAInput").val(val);
     let x = val;
     let y = 100-x;
@@ -87,18 +79,35 @@ input[type=range]::-moz-range-thumb {
 
 jt.connected = function() {
     jt.socket.on('playerUpdate', function(player) {
-        s.textContent = '';
+        jt.sliderSet = false;
+        jt.tickingUp = true;
+        jt.tickVal = 40;
+        jt.sliderIncr = 1;
+    
+        tick = function() {
+            if (!jt.sliderSet) {
+                let val = jt.tickVal;
+                if (val >= 100) {
+                    jt.tickingUp = false;
+                } else if (val <= 0) {
+                    jt.tickingUp = true;
+                }
+                if (jt.tickingUp) {
+                    val = val + jt.sliderIncr;
+                } else {
+                    val = val - jt.sliderIncr;
+                }
+    
+                document.getElementById('slider').value = val;
+                jt.tickVal = val;
+            }
+        }
+    
+        jt.sliderTimer = setInterval(tick, 200);
     });
 }
 </script>
 <style>
-input[type=range]::-webkit-slider-thumb {
-    max-width: 0px;
-}
-input[type=range]::-moz-range-thumb {
-    border: none;
-    width: 0px;
-}
 body {
     max-width: unset;
 }

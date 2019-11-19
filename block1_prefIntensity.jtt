@@ -32,8 +32,7 @@ stage.activeScreen = `
     <p>
     Please indicate at which decision you would like to switch from Option A to Option B by putting a check mark in the box of the Switch column. When you are finished, you should have 1 check mark. For any decisions above this check mark, Option A will be used. For any decisions below and including the check mark, Option B will be used.
     </p>
-    <img :src='"14anita/images/" + player.option.filename'>
-    <div>{{player.option.text}}</div>
+    <img v-show='player.situation.showImageForPrefInt' :src='"14anita/images/" + player.option.filename'>
     <br><br>
     <table style='font-size: 14pt; border-spacing: 0px;'>
         <tr style='background-color: #AAA'>
@@ -70,8 +69,6 @@ stage.activeScreen = `
         </tr>
         <input type='radio' required name='player.switchRow' hidden value='unknown' :checked='player.switchRow == player.option.alternativesList.length'>
     </table>
-    <div>Choice: {{player.switchRow}}</div>
-    <div>Switch-to-B Tokens: {{player.switchToBTokens}}</div>
     <button :disabled='player.switchRow == -1'>OK</button>
     <script>
     clickRow = function(target) {
