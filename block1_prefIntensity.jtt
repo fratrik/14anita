@@ -9,12 +9,14 @@ stage.playerStart = function(player) {
     let sit = Math.floor((player.period().id-1)/2);
     let situation = app.session.decisionSituations[player.participant.decSitSequence[sit]];
     player.situation = situation;
+    player.situationName = situation.name;
     let storeNext = false;
     if (player.participant.useA == null) {
         player.participant.useA = Math.random() < 0.5;
         storeNext = true;
     } 
     player.option = player.participant.useA ? situation.optionA : situation.optionB;
+    player.optionText = player.option.text;
     player.participant.useA = !player.participant.useA;
     if (!storeNext) {
         player.participant.useA = null;
@@ -27,6 +29,9 @@ stage.playerStart = function(player) {
     }
 }
 stage.activeScreen = `
+    <p>
+    Please indicate at which decision you would like to switch from Option A to Option B by putting a check mark in the box of the Switch column. When you are finished, you should have 1 check mark. For any decisions above this check mark, Option A will be used. For any decisions below and including the check mark, Option B will be used.
+    </p>
     <img :src='"14anita/images/" + player.option.filename'>
     <div>{{player.option.text}}</div>
     <br><br>
@@ -34,7 +39,7 @@ stage.activeScreen = `
         <tr style='background-color: #AAA'>
             <th>Option A</th>
             <th>Option B</th>
-            <th>Switch-to-B column</th>
+            <th>Switch</th>
         </tr>
         <tr v-for='(alternative, key) in player.option.alternativesList'>
             <td
@@ -89,6 +94,11 @@ stage.activeScreen = `
     }
     </script>
     <style>
+        th {
+            padding: 5px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
         td.option {
             padding: 5px;
             padding-top: 15px;
@@ -127,7 +137,8 @@ stage.playerEnd = function(player) {
         let drawnPayoff = player.participant.latestPayoffs[round];
         player.participant.payoffs.push({
             round: round,
-            payoff: drawnPayoff
+            payoff: drawnPayoff,
+            block: 'Block 1 Pref. Int.'
         });
     }
 }

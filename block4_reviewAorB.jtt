@@ -6,15 +6,36 @@ app.modifyPathsToIncludeId = false;
 
 let stage = app.newStage('hello');
 stage.playerStart = function(player) {
-    let block = player.participant.reviewSequence[player.period().id-1]; // 0, 1 or 2
+    let participant = player.participant;
+    let sit = player.period().id - 1;
+    let block = participant.reviewSequence[sit]; // 0, 1 or 2
     player.choiceLetters = '';
     let start = block*10;
+    player.situation = app.session.decisionSituations[participant.decSitSequence[block]];
     for (let i=start; i<start+10; i++) {
-        player.choiceLetters += player.participant.latestPayoffs[i].letter;
+        if (participant.decSitABSeq[sit] == 'AB') {
+            player.choiceLetters += participant.latestPayoffs[i].letter;
+        } else {
+            if (participant.latestPayoffs[i].letter === 'A') {
+                player.choiceLetters += 'B';
+            } else {
+                player.choiceLetters += 'A';
+            }
+        }
     }
-    player.situation = app.session.decisionSituations[player.participant.decSitSequence[block]];
-    if (player.period().id === 1) {
-        player.participant.latestPayoffs2 = [];
+    if (participant.decSitABSeq[sit] == 'AB') {
+        player.left = player.situation.optionA;
+        player.right = player.situation.optionB;
+        player.left.letter = 'A';
+        player.right.letter = 'B';
+    } else {
+        player.left = player.situation.optionB;
+        player.right = player.situation.optionA;
+        player.left.letter = 'B';
+        player.right.letter = 'A';
+    }
+    if (sit === 0) {
+        participant.latestPayoffs2 = [];
     }
 }
 stage.playerEnd = function(player) {
@@ -38,20 +59,38 @@ stage.playerEnd = function(player) {
         let drawnPayoff = player.participant.latestPayoffs2[round];
         player.participant.payoffs.push({
             round: round, 
-            payoff: drawnPayoff
+            payoff: drawnPayoff,
+            block: 'Block 4 Review AorB'
         });
     }
 }
 stage.activeScreen = `
-<h3>Review your choices from Block 3</h3>
-<img :src='"14anita/images/" + player.situation.optionA.filename' width='300' height='300'>
-<p>Option A: {{player.situation.optionA.text}}</p>
-<img :src='"14anita/images/" + player.situation.optionB.filename' width='300' height='300'>
-<p>Option B: {{player.situation.optionB.text}}</p>
-<p>Your choices: {{player.choiceLetters}}</p>
+<p>Previously you were presented with the following options:</p>
+<div style='display: flex; align-items: center'>
+    <div style='flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; margin: 50px'>
+        <img :src='"14anita/images/" + player.left.filename' width='600'>
+        <p>Option A: {{player.left.text}}</p>
+    </div>
+    <div style='flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; margin: 50px'>
+        <img :src='"14anita/images/" + player.right.filename' width='600'>
+        <p>Option B: {{player.right.text}}</p>
+    </div>
+    <input id='choice' style='z-index: -10; position: absolute' name='player.selectedOption'>
+    <input id='choiceLetter' style='z-index: -10; position: absolute' name='player.selectedOptionLetter'>
+</div>
+
+<p>Your choices were: {{player.choiceLetters}}</p>
+<p>Below you have the option to revise your answers or to keep your choices the same:</p>
 <div>
-    <button type='submit' name='player.change' value='allA'>All A</button>
-    <button type='submit' name='player.change' value='allB'>All B</button>
+    <button v-show='player.choiceLetters !== "AAAAAAAAAA"' type='submit' name='player.change' value='allA'>All A</button>
+    <button v-show='player.choiceLetters !== "BBBBBBBBBB"' type='submit' name='player.change' value='allB'>All B</button>
     <button type='submit' name='player.change' value='noChange'>No changes</button>
 </div>
-`
+<style>
+#jtree {
+    min-width: unset;
+}
+body {
+    max-width: unset;
+}
+</style>`

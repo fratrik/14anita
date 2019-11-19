@@ -7,7 +7,7 @@ stage.addOKButtonIfNone = false;
 stage.activeScreen = `
     <h4>Payoffs per Block</h4>
     <div v-for='(payoffObj, key) in participant.payoffs'>
-        {{key+1}}. {{payoffObj.payoff}} (Round {{payoffObj.round+1}}).
+        {{key+1}}. {{payoffObj.payoff}} ({{payoffObj.block}}, Round {{payoffObj.round+1}}).
     </div>
     <h4>Final Payoff</h4>
     <div>{{player.points}} (Block {{player.chosenBlock+1}}).

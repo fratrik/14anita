@@ -8,13 +8,14 @@ stage.playerStart = function(player) {
     let sit = player.period().id-1;
     let situation = app.session.decisionSituations[player.participant.decSitSequence[sit]];
     player.situation = situation;
+    player.situationName = situation.name;
     player.slider = -1;
     if (player.period().id === 1) {
         player.participant.latestPayoffs = [];
     }
 }
 stage.activeScreen = `
-<p>Choose a probability:</p>
+<p>There are two options: option A and option B which you see below. If this question is selected for payout, a lottery will determine which of the two options you get. You can now determine the probability with which each option is selected in this lottery. If you choose 0, option A has 0% probability of being selected and option B has a 100% probability of being selected in the lottery. If you choose 100, option A has a 100% probability of being selected and option B has a 0% probability of being selected. If you choose 70, option A has a 70% probability of being selected and option B has a 30% probability of being selected, and so on. You can adjust the slider or enter values in either of the two fields.</p>
 <div style='display: flex; width: 100%'>
     <img :src='"14anita/images/" + player.situation.optionA.filename'>
     <span style='flex: 1 0 400px'></span>
@@ -22,9 +23,9 @@ stage.activeScreen = `
 </div>
 
 <div style='display: flex; width: 100%'>
-    <span style='flex: 0 0 200px'><b>{{player.situation.optionA.text}}</b></span>
+    <span style='flex: 0 0 200px'><b>Option A</b></span>
     <span style='flex: 1 0 400px'></span>
-    <span style='flex: 0 0 200px; text-align: right'><span><b>{{player.situation.optionB.text}}</b></span>
+    <span style='flex: 0 0 200px; text-align: right'><span><b>Option B</b></span>
 </div>
 <div style='width: 80%; padding-left: 10%; padding-right: 10%'>
     <input 
@@ -33,7 +34,7 @@ stage.activeScreen = `
         name='player.slider' 
         min="0" 
         max="100" 
-        step="0.1" 
+        step="1" 
         oninput="showSliderVal(this.value)" 
         onchange="showSliderVal(this.value)"
         style='width: 100%;'>
@@ -45,7 +46,7 @@ stage.activeScreen = `
             type='number' 
             min='0' 
             max='100' 
-            step='0.1' 
+            step='1' 
             onchange="showSliderVal(this.value)"
         >
     </span>
@@ -56,7 +57,7 @@ stage.activeScreen = `
             type='number' 
             min='0' 
             max='100' 
-            step='0.1' 
+            step='1' 
             onchange="showSliderVal(100-this.value)"
         >
     </span>
@@ -68,10 +69,17 @@ stage.activeScreen = `
 let s = document.createElement("style");
 document.head.appendChild(s);
 showSliderVal = function(val) {
-    s.textContent = "#slider::-webkit-slider-thumb{max-width: 20px}"
+    s.textContent = \`
+#slider::-webkit-slider-thumb{
+    max-width: 20px
+}
+input[type=range]::-moz-range-thumb {
+    width: 10px;
+}
+\`;
     $("#optionAInput").val(val);
-    let x = Math.floor(val*10);
-    let y = (1000-x)/10;
+    let x = val;
+    let y = 100-x;
     $("#optionBInput").val(y);
     document.getElementById('slider').value = val;
     jt.vue.player.slider = val;
@@ -86,6 +94,10 @@ jt.connected = function() {
 <style>
 input[type=range]::-webkit-slider-thumb {
     max-width: 0px;
+}
+input[type=range]::-moz-range-thumb {
+    border: none;
+    width: 0px;
 }
 body {
     max-width: unset;
@@ -119,7 +131,8 @@ stage.playerEnd = function(player) {
         let drawnPayoff = player.participant.latestPayoffs[round];
         player.participant.payoffs.push({
             round: round, 
-            payoff: drawnPayoff
+            payoff: drawnPayoff,
+            block: 'Block 2 Prob.'
         });
     }
 }
