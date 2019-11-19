@@ -1,15 +1,8 @@
-/**
- * TODO
- * wait for all after each app?
- * check payment
- **/ 
-
-
-session.addApp('block_list.jtt');
-session.addApp('block_prob.jtt');
-session.addApp('block_AorB.jtt');
-session.addApp('block_reviewAorB.jtt');
-session.addApp('block_prob.jtt');
+session.addApp('block1_prefIntensity.jtt');
+session.addApp('block2_prob.jtt');
+session.addApp('block3_AorB.jtt');
+session.addApp('block4_reviewAorB.jtt');
+session.addApp('block2_prob.jtt');
 session.addApp('survey.jtt');
 session.addApp('results.jtt');
 
@@ -91,7 +84,6 @@ for (let i in session.decisionSituations) {
 
 session.participantStart = function(participant) {
     participant.payoffs = [];
-    let session = participant.session;
     let sequence = [0, 1, 2];    
     let x = Utils.shuffle(sequence);
     let indexOf2 = x.indexOf(2);
@@ -103,10 +95,6 @@ session.participantStart = function(participant) {
     participant.decSitSequence = Utils.shuffle([0, 1, 2]);
     participant.reviewSequence = Utils.shuffle([0, 1, 2]);
     participant.reviewSequence.splice(2, 1);
-
-    // TODO: remove
-    // participant.appSequence = [0, 1, 2, 3, 4, 5, 6];
-
 }
 
 session.getApp = function(participant) {

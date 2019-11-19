@@ -28,6 +28,7 @@ stage.playerStart = function(player) {
 }
 stage.activeScreen = `
     <img :src='"14anita/images/" + player.option.filename'>
+    <div>{{player.option.text}}</div>
     <br><br>
     <table style='font-size: 14pt; border-spacing: 0px;'>
         <tr style='background-color: #AAA'>
@@ -60,7 +61,7 @@ stage.activeScreen = `
             >
                 {{alternative}} tokens for sure
             </td>
-            <td><input type='radio' required name='player.switchRow' :value='alternative' :checked='player.switchRow == key' :onclick='"setRow(" + key + ")"'></td>
+            <td style='text-align: center'><input type='radio' required name='player.switchRow' :value='alternative' :checked='player.switchRow == key' :onclick='"setRow(" + key + ")"'></td>
         </tr>
         <input type='radio' required name='player.switchRow' hidden value='unknown' :checked='player.switchRow == player.option.alternativesList.length'>
     </table>
@@ -90,6 +91,8 @@ stage.activeScreen = `
     <style>
         td.option {
             padding: 5px;
+            padding-top: 15px;
+            padding-bottom: 15px;
             cursor: pointer;
             border: 2px solid transparent;
         }
