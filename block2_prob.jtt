@@ -80,8 +80,8 @@ showSliderVal = function(val) {
 jt.connected = function() {
     jt.socket.on('playerUpdate', function(player) {
         jt.sliderSet = false;
-        jt.tickingUp = true;
-        jt.tickVal = 40;
+        jt.tickingUp = Math.random() < 0.5;
+        jt.tickVal = 50 + (jt.tickingUp ? -1 : 1)*10;
         jt.sliderIncr = 1;
     
         tick = function() {
@@ -103,7 +103,7 @@ jt.connected = function() {
             }
         }
     
-        jt.sliderTimer = setInterval(tick, 200);
+        jt.sliderTimer = setInterval(tick, 100);
     });
 }
 </script>

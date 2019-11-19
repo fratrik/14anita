@@ -26,16 +26,7 @@ app.html = `
 </html>
 `;
 
-let intro = app.newStage('intro');
-intro.activeScreen = `
-    Now you will make decisions.
-`;
-intro.canPlayerParticipate = function(player) {
-    return player.period().id === 1;
-}
-
-let stage = app.newStage('hello');
-stage.playerStart = function(player) {
+app.initPlayer = function(player) {
     let sit = Math.floor((player.period().id-1)/10);
     let participant = player.participant;
     let situation = app.session.decisionSituations[participant.decSitSequence[sit]];
@@ -60,22 +51,28 @@ stage.playerStart = function(player) {
         player.participant.latestPayoffs = [];
     }
 
-    player.curPeriod = player.period().id - Math.floor(player.period().id / app.repsPerSit)*app.repsPerSit;
+    player.curPeriod = player.period().id - Math.floor((player.period().id-1) / app.repsPerSit)*app.repsPerSit;
 }
 
+let intro = app.newStage('intro');
+intro.activeScreen = `
+    Now you will make decisions.
+`;
+intro.canPlayerParticipate = function(player) {
+    app.initPlayer(player);
+    if (player.period().id % app.repsPerSit === 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+let stage = app.newStage('hello');
 stage.playerEnd = function(player) {
     player.participant.latestPayoffs.push({
         text: player.selectedOption,
         letter: player.selectedOptionLetter
     });
-    // if (player.period().id == app.numPeriods) {
-    //     let round = Utils.randomInt(0, app.numPeriods);
-    //     let drawnPayoff = player.participant.latestPayoffs[round];
-    //     player.participant.payoffs.push({
-    //         round: round, 
-    //         payoff: drawnPayoff.text
-    //     });
-    // }
 }
 
 stage.activeScreen = `
@@ -92,9 +89,9 @@ stage.activeScreen = `
     </div>
     <input id='choice' style='z-index: -10; position: absolute' name='player.selectedOption'>
     <input id='choiceLetter' style='z-index: -10; position: absolute' name='player.selectedOptionLetter'>
-    <div style='margin-top: 10rem'>
-        <button :disabled='player.selectedOption == -1' style='margin: 20px'>OK</button>
-    </div>
+</div>
+<div style='margin-top: 6rem; text-align: center'>
+    <button :disabled='player.selectedOption == -1'>OK</button>
 </div>
 <script>
 jt.connected = function() {

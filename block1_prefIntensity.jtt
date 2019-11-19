@@ -30,7 +30,10 @@ stage.playerStart = function(player) {
 }
 stage.activeScreen = `
     <p>
-    Please indicate at which decision you would like to switch from Option A to Option B by putting a check mark in the box of the Switch column. When you are finished, you should have 1 check mark. For any decisions above this check mark, Option A will be used. For any decisions below and including the check mark, Option B will be used.
+    Each row in the list below shows one decision. Each decision is a choice between an Option A and an Option B. Rather than indicating your preferred option in each row, you are asked to <u>only indicate at which row you switch from Option A to Option B by clicking on the Option A in the last row in which you prefer it</u>. Once you do so, it will highlight Option A in all rows where you prefer Option A and it will highlight Option B in all rows where you prefer Option B. You can make adjustments then if you wish to do so.
+    </p>
+    <p>
+    At the end of the experiment, if this question is selected for payout, the computer will randomly select one row and implement the decision you made.
     </p>
     <img v-show='player.situation.showImageForPrefInt' :src='"14anita/images/" + player.option.filename'>
     <br><br>
