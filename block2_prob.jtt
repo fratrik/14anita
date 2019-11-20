@@ -52,14 +52,7 @@ stage.activeScreen = `
     </span>
     <span style='flex: 1 1 500px'></span>
     <span style='width: 70px'>
-        <input 
-            id='optionBInput' 
-            type='number' 
-            min='0' 
-            max='100' 
-            step='1' 
-            onchange="showSliderVal(100-this.value)"
-        >
+        <span>{{100 - jt.vue.player.slider}}</span>
     </span>
 </div>
 <div style='width: 100%; display: flex; justify-content: center'>
@@ -71,8 +64,6 @@ showSliderVal = function(val) {
     clearInterval(jt.sliderTimer);
     $("#optionAInput").val(val);
     let x = val;
-    let y = 100-x;
-    $("#optionBInput").val(y);
     document.getElementById('slider').value = val;
     jt.vue.player.slider = val;
 }
