@@ -5,6 +5,9 @@ session.addApp('block4_reviewAorB.jtt');
 session.addApp('block2_prob.jtt');
 session.addApp('survey.jtt');
 session.addApp('results.jtt');
+session.addApp('thankyou.jtt');
+
+session.repsForBlock3 = 20;
 
 session.decisionSituations = [
     {
@@ -27,6 +30,28 @@ session.decisionSituations = [
                 step: 5
             },
             filename: 'HL B.png'
+        },
+    },
+    {
+        name: 'MediumLottery',
+        showImageForPrefInt: false,
+        optionA: {
+            text: '[medium lottery A]',
+            alternatives: {
+                min: 20,
+                max: 180,
+                step: 5
+            },
+            filename: 'ML A.png'
+        },
+        optionB: {
+            text: '[medium lottery B]',
+            alternatives: {
+                min: 60,
+                max: 115,
+                step: 5
+            },
+            filename: 'ML B.png'
         },
     },
     {
@@ -97,15 +122,21 @@ session.participantStart = function(participant) {
     x.push(4);
     x.push(5);
     x.push(6);
+    x.push(7);
     participant.appSequence = x;
-    participant.decSitSequence = Utils.shuffle([0, 1, 2]);
-    participant.reviewSequence = Utils.shuffle([0, 1, 2]);
+    let decSits = [];
+    let revSits = [];
+    for (let i in session.decisionSituations) {
+        decSits.push(i);
+        revSits.push(i);
+    }
+    participant.decSitSequence = Utils.shuffle(decSits);
+    participant.reviewSequence = Utils.shuffle(revSits);
     participant.reviewSequence.splice(2, 1);
-    participant.decSitABSeq = [
-        Math.random() < 0.5 ? 'AB' : 'BA',
-        Math.random() < 0.5 ? 'AB' : 'BA',
-        Math.random() < 0.5 ? 'AB' : 'BA'
-    ];
+    participant.decSitABSeq = [];
+    for (let i in participant.decSitSequence) {
+        participant.decSitABSeq.push(Math.random() < 0.5 ? 'AB' : 'BA');
+    }
 }
 
 session.getApp = function(participant) {

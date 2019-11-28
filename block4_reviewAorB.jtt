@@ -10,9 +10,9 @@ stage.playerStart = function(player) {
     let sit = player.period().id - 1;
     let block = participant.reviewSequence[sit]; // 0, 1 or 2
     player.choiceLetters = '';
-    let start = block*10;
+    let start = block*app.session.repsForBlock3;
     player.situation = app.session.decisionSituations[participant.decSitSequence[block]];
-    for (let i=start; i<start+10; i++) {
+    for (let i=start; i<start+app.session.repsForBlock3; i++) {
         if (participant.decSitABSeq[sit] == 'AB') {
             player.choiceLetters += participant.latestPayoffs[i].letter;
         } else {
@@ -41,12 +41,12 @@ stage.playerStart = function(player) {
 stage.playerEnd = function(player) {
     player.revisedChoiceLetters = player.choiceLetters;
     if (player.change == 'allA') {
-        player.revisedChoiceLetters = 'AAAAAAAAAA';
+        player.revisedChoiceLetters = 'A'.repeat(app.session.repsForBlock3);
     } else if (player.change == 'allB') {
-        player.revisedChoiceLetters = 'BBBBBBBBBB';
+        player.revisedChoiceLetters = 'B'.repeat(app.session.repsForBlock3);
     } 
 
-    let period = Utils.randomInt(0, 10);
+    let period = Utils.randomInt(0, app.session.repsForBlock3);
     player.payoff = 
         player.revisedChoiceLetters[period] == 'A' 
         ? player.situation.optionA.text 
@@ -65,8 +65,8 @@ stage.playerEnd = function(player) {
     }
 }
 stage.activeScreen = `
-<p>Previously you were presented with the following options:</p>
-<div style='display: flex; align-items: center'>
+<p>Previously you made {{player.choiceLetters.length}} consecutive choices between the following options:</p>
+<div style='display: flex; align-items: center; font-size: 24pt'>
     <div style='flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; margin: 50px'>
         <img :src='"14anita/images/" + player.left.filename' width='600'>
         <p>Option A</p>
@@ -79,11 +79,11 @@ stage.activeScreen = `
     <input id='choiceLetter' style='z-index: -10; position: absolute' name='player.selectedOptionLetter'>
 </div>
 
-<p>Your choices were: {{player.choiceLetters}}</p>
+<span>Your choices were: <span style='font-size: 24pt'>{{player.choiceLetters}}</span></span>
 <p>Below you have the option to revise your answers or to keep your choices the same:</p>
 <div>
-    <button v-show='player.choiceLetters !== "AAAAAAAAAA"' type='submit' name='player.change' value='allA'>All A</button>
-    <button v-show='player.choiceLetters !== "BBBBBBBBBB"' type='submit' name='player.change' value='allB'>All B</button>
+    <button v-show='player.choiceLetters !== "A".repeat(app.session.repsForBlock3)' type='submit' name='player.change' value='allA'>All A</button>
+    <button v-show='player.choiceLetters !== "B".repeat(app.session.repsForBlock3)' type='submit' name='player.change' value='allB'>All B</button>
     <button type='submit' name='player.change' value='noChange'>No changes</button>
 </div>
 <style>
