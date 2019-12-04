@@ -15,43 +15,27 @@ session.decisionSituations = [
         showImageForPrefInt: false,
         optionA: {
             text: '[20, 20, 180, 180]',
-            alternatives: {
-                min: 20,
-                max: 180,
-                step: 5
-            },
-            filename: 'HL A.png'
+            filename: 'HL A.png',
+            description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
         },
         optionB: {
             text: '[64, 90, 90, 112]',
-            alternatives: {
-                min: 60,
-                max: 115,
-                step: 5
-            },
-            filename: 'HL B.png'
+            filename: 'HL B.png',
+            description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
         },
     },
     {
-        name: 'MediumLottery',
+        name: 'TimePreference',
         showImageForPrefInt: false,
         optionA: {
-            text: '[medium lottery A]',
-            alternatives: {
-                min: 20,
-                max: 180,
-                step: 5
-            },
-            filename: 'ML A.png'
+            text: '[12 tokens today, 88 tokens in two weeks]',
+            filename: 'TP A.png',
+            description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
         },
         optionB: {
-            text: '[medium lottery B]',
-            alternatives: {
-                min: 60,
-                max: 115,
-                step: 5
-            },
-            filename: 'ML B.png'
+            text: '[68 tokens today, 20 tokens in two weeks]',
+            filename: 'TP B.png',
+            description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
         },
     },
     {
@@ -59,21 +43,13 @@ session.decisionSituations = [
         showImageForPrefInt: true,
         optionA: {
             text: 'Chocolate bar 1',
-            alternatives: {
-                min: 0,
-                max: 50,
-                step: 5
-            },
-            filename: 'CH A.png'
+            filename: 'CH A.jpg',
+            description: 'a chocolate bar as displayed below',
         },
         optionB: {
             text: 'Chocolate bar 2',
-            alternatives: {
-                min: 0,
-                max: 50,
-                step: 5
-            },
-            filename: 'CH B.png'
+            filename: 'CH B.jpg',
+            description: 'a chocolate bar as displayed below',
         },
     },
     {
@@ -81,37 +57,16 @@ session.decisionSituations = [
         showImageForPrefInt: false,
         optionA: {
             text: '[94, 94, 94, 94]',
-            alternatives: {
-                min: 90,
-                max: 96,
-                step: 1
-            },
-            filename: 'EL A.png'
+            filename: 'EL A.png',
+            description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
         },
         optionB: {
             text: '[94, 94, 96, 96]',
-            alternatives: {
-                min: 90,
-                max: 96,
-                step: 1
-            },
-            filename: 'EL B.png'
+            filename: 'EL B.png',
+            description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
         },
     }
 ]
-
-for (let i in session.decisionSituations) {
-    let sit = session.decisionSituations[i];
-    let AB = ['A', 'B'];
-    for (let x in AB) {
-        let option = sit['option' + AB[x]];
-        let alts = option.alternatives;
-        option.alternativesList = [];
-        for (let i=alts.min; i<=alts.max; i+=alts.step) {
-            option.alternativesList.push(i);
-        }
-    }
-}
 
 session.participantStart = function(participant) {
     participant.payoffs = [];
