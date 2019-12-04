@@ -39,39 +39,41 @@ stage.activeScreen = `
 <p>There are two options: option A and option B which you see below. If this question is selected for payout, a lottery will determine which of the two options you get. You can now determine the probability with which each option is selected in this lottery. If you choose 0, option A has 0% probability of being selected and option B has a 100% probability of being selected in the lottery. If you choose 100, option A has a 100% probability of being selected and option B has a 0% probability of being selected. If you choose 70, option A has a 70% probability of being selected and option B has a 30% probability of being selected, and so on. You can enter your preferred probability for option A in the field.</p>
 <div style='display: flex; width: 100%;  margin-bottom: 2rem'>
     <img :src='"14anita/images/" + player.situation.optionA.filename'>
-    <span style='flex: 1 0 400px'></span>
+    <span style='flex: 1 0 200px'></span>
     <img :src='"14anita/images/" + player.situation.optionB.filename'>
 </div>
 
 <div style='display: flex; width: 100%; font-size: 24pt'>
-    <span style='flex: 0 0 auto; margin-left: 200px;'><b>Option A</b></span>
-    <span style='flex: 1 0 200px'></span>
-    <span style='flex: 0 0 auto; margin-right: 200px;'><span><b>Option B</b></span>
+    <span style='flex: 0 0 auto; margin-left: 300px;'><b>Option A</b></span>
+    <span style='flex: 1 0 100px'></span>
+    <span style='flex: 0 0 auto; margin-right: 300px;'><span><b>Option B</b></span>
 </div>
 <div style='display: flex; width: 100%'>
-    <span style='width: 80px; margin-left: 220px; font-size: 24pt; display: flex'>
+    <span style='width: 80px; margin-left: 300px; font-size: 24pt; display: flex'>
         <input 
             id='optionAInput' 
-            type='number' 
-            min='0' 
-            max='100' 
-            step='1' 
+            pattern='^([0]?[0-9]?[0-9]|100)'
             onchange="showSliderVal(this.value)"
             onkeyup="showSliderVal(this.value)"
             style='display: inline !important'
         >%
     </span>
-    <span style='flex: 1 1 500px'></span>
-    <span style='width: 140px; font-size: 24pt; margin-right: 140px'>
-        <span>{{player.slider == -1 ? '-' : (100 - player.slider)}}%</span>
+    <span style='flex: 1 1 360px'></span>
+    <span style='width: 140px; font-size: 24pt; margin-right: 220px'>
+        <span>{{(player.slider >= 0 && player.slider <= 100) ? (100 - player.slider) : '-'}}%</span>
     </span>
 </div>
 <div style='width: 100%; display: flex; justify-content: center'>
-<button :disabled='player.slider == -1'>OK</button>
+<button :disabled='!(player.slider >= 0 && player.slider <= 100)'>OK</button>
 </div>
 <script>
 showSliderVal = function(val) {
-    $("#optionAInput").val(val);
+    if (val == '') {
+        val = -1;
+    }
+    if (Math.floor(val) != val) {
+        val = -1;
+    }
     jt.vue.player.slider = val;
 }
 </script>

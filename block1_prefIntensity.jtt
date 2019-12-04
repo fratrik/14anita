@@ -57,13 +57,25 @@ The researchers conducting this experiment assume that you will choose Option A 
         </tr>
     </table>
     <br>
-    <div>At which token value would you switch from Option A to Option B? <input type='number' required name='player.switchRow' min='0' max='200' style='width: 64px' v-model='player.switchRow'> tokens</div>
+    <div>At which token value would you switch from Option A to Option B? <input type='text' required name='player.switchRow' pattern='^([01]?[0-9]?[0-9]|200)' style='width: 64px' onchange="showSwitchVal(this.value)"
+    onkeyup="showSwitchVal(this.value)"> tokens</div>
     <br>
-    <button :disabled='player.switchRow == ""'>OK</button>
-    <style>
-    body {
-        max-width: 1000px;
+    <button :disabled='!(player.switchRow >= 0 && player.switchRow <= 200)'>OK</button>
+    <script>
+    showSwitchVal = function(val) {
+        if (val == '') {
+            val = -1;
+        }
+        if (Math.floor(val) != val) {
+            val = -1;
+        }
+        jt.vue.player.switchRow = val;
     }
+    </script>
+    <style>
+        body {
+            max-width: 1000px;
+        }
         table {
             border-spacing: 0px;
             border-collapse: collapse;

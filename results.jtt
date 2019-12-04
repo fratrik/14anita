@@ -6,11 +6,6 @@ stage.playerStart = function(player) {
     player.points = player.participant.payoffs[player.chosenBlock].payoff;
 }
 stage.activeScreen = `
-    <h4>Payoffs per Block</h4>
-    <div v-for='(payoffObj, key) in participant.payoffs'>
-        {{key+1}}. {{payoffObj.payoff}} ({{payoffObj.block}}, Round {{payoffObj.round+1}}).
-    </div>
-    <h4>Final Payoff</h4>
-    <div>{{player.points}} (Block {{player.chosenBlock+1}}).
-    <br><br>
-`
+    <h4>End</h4>
+    <p>The computer has now randomly determined your payoff for this experiment. Your payoff is: {{player.points}}.</p>
+    <br>

@@ -3,7 +3,6 @@ session.addApp('block2_prob.jtt');
 session.addApp('block3_AorB.jtt');
 session.addApp('block4_reviewAorB.jtt');
 session.addApp('block2_prob.jtt');
-session.addApp('survey.jtt');
 session.addApp('results.jtt');
 session.addApp('thankyou.jtt');
 
@@ -77,7 +76,6 @@ session.participantStart = function(participant) {
     x.push(4);
     x.push(5);
     x.push(6);
-    x.push(7);
     participant.appSequence = x;
     let decSits = [];
     let revSits = [];
