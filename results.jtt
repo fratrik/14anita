@@ -9,3 +9,4 @@ stage.activeScreen = `
     <h4>End</h4>
     <p>The computer has now randomly determined your payoff for this experiment. Your payoff is: {{player.points}}.</p>
     <br>
+`

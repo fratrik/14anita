@@ -80,7 +80,7 @@ stage.activeScreen = `
 </div>
 
 <span>Your choices were: <span style='font-size: 24pt'>{{player.choiceLetters}}</span></span>
-<p>Below you have the option to revise your answers or to keep your choices the same:</p>
+<p>Below you have the option to revise your choices or to keep your choices the same. For example, if you click on "All A" ("All B") below, all previous choices for the {{app.session.repsForBlock3}} questions you made will not be considered for payout but instead the computer will calculate payout as if you chose option A (option B) in all {{app.session.repsForBlock3}} questions.</p>
 <div>
     <button v-show='player.choiceLetters !== "A".repeat(app.session.repsForBlock3)' type='submit' name='player.change' value='allA'>All A</button>
     <button v-show='player.choiceLetters !== "B".repeat(app.session.repsForBlock3)' type='submit' name='player.change' value='allB'>All B</button>

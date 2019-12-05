@@ -57,8 +57,19 @@ The researchers conducting this experiment assume that you will choose Option A 
         </tr>
     </table>
     <br>
-    <div>At which token value would you switch from Option A to Option B? <input type='text' required name='player.switchRow' pattern='^([01]?[0-9]?[0-9]|200)' style='width: 64px' onchange="showSwitchVal(this.value)"
-    onkeyup="showSwitchVal(this.value)"> tokens</div>
+    <div>
+        At which token value would you switch from Option A to Option B? 
+        <input 
+            type='text' 
+            required name='player.switchRow' 
+            pattern='^([01]?[0-9]?[0-9]|200)' 
+            style='width: 64px' 
+            onchange="showSwitchVal(this.value)"
+            onkeyup="showSwitchVal(this.value)"
+            v-on:keydown.enter.prevent
+        > 
+        tokens
+    </div>
     <br>
     <button :disabled='!(player.switchRow >= 0 && player.switchRow <= 200)'>OK</button>
     <script>
