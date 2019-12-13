@@ -1,0 +1,8 @@
+app.isStandaloneApp = false;
+app.groupSize = 1;
+
+let stage = app.newStage('thankyou');
+stage.addOKButtonIfNone = false;
+stage.activeScreen = `
+Thank you for your participation. Please wait for further instructions from the experimenter.
+`
