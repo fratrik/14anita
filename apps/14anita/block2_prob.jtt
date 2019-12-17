@@ -73,6 +73,16 @@ stage.activeScreen = `
 <button tabindex='-1' :disabled='!(player.slider >= 0 && player.slider <= 100)'>OK</button>
 </div>
 <script>
+jt.connected = function() {
+    jt.socket.on('playerUpdate', function(player) {
+        let inputs = $('input');
+        for (let i=0; i<inputs.length; i++) {
+            inputs[i].onpaste = function(e) {
+                e.preventDefault();
+            }
+        }
+    });
+}
 showSliderVal = function(val) {
     if (val.trim != null) {
         val = val.trim();
@@ -84,7 +94,9 @@ showSliderVal = function(val) {
         val = -1;
     }
     jt.vue.player.slider = val;
-    $('#optionAInput').val(val);
+    if (val != -1) {
+        $('#optionAInput').val(val);
+    }
 }
 </script>
 <style>

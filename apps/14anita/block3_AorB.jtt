@@ -104,6 +104,12 @@ stage.activeScreen = `
 <script>
 jt.connected = function() {
     jt.socket.on('playerUpdate', function(player) {
+        let inputs = $('input');
+        for (let i=0; i<inputs.length; i++) {
+            inputs[i].onpaste = function(e) {
+                e.preventDefault();
+            }
+        }
         player = JSON.parse(player);
         if (player.stage.id === "intro") {
             return;

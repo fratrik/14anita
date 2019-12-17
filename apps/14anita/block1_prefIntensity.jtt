@@ -91,8 +91,20 @@ The researchers conducting this experiment assume that you will choose Option A 
             val = -1;
         }
         jt.vue.player.switchRow = val;
-        $('#switchRow').val(val);
+        if (val != -1) {
+            $('#switchRow').val(val);
+        }
     }
+jt.connected = function() {
+    jt.socket.on('playerUpdate', function(player) {
+        let inputs = $('input');
+        for (let i=0; i<inputs.length; i++) {
+            inputs[i].onpaste = function(e) {
+                e.preventDefault();
+            }
+        }
+    });
+}
     </script>
     <style>
         body {
