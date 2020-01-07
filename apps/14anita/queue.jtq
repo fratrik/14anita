@@ -22,6 +22,7 @@ session.decisionSituations = [
             filename: 'HL B.png',
             description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
         },
+        descAB: 'a lottery with 4 potential outcomes, each outcome being equally likely',
     },
     {
         name: 'TimePreference',
@@ -29,13 +30,14 @@ session.decisionSituations = [
         optionA: {
             text: '[12 tokens today, 88 tokens in two weeks]',
             filename: 'TP A.png',
-            description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
+            description: '“a timed payment as described below',
         },
         optionB: {
             text: '[68 tokens today, 20 tokens in two weeks]',
             filename: 'TP B.png',
-            description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
+            description: 'a timed payment as described below',
         },
+        descAB: 'a timed payment',
     },
     {
         name: 'ChocolateBars',
@@ -50,6 +52,7 @@ session.decisionSituations = [
             filename: 'CH B.jpg',
             description: 'a chocolate bar as displayed below',
         },
+        descAB: 'a chocolate bar',
     },
     {
         name: 'EasyLottery',

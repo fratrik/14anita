@@ -30,7 +30,7 @@ stage.playerStart = function(player) {
 }
 stage.activeScreen = `
     <p>
-Below you can see a list of questions. In each question you pick either Option A ({{player.optionDesc}}) or Option B (amount of tokens). At the end of the experiment, if this decision situation is chosen for payout, the computer will randomly pick one question from the list and pay you the option you chose on that one question. Each question is equally likely to be chosen for payment. If you lie on any question, if that question gets chosen for
+Below you can see a list of 200 questions. In each question you pick either Option A ({{player.optionDesc}}) or Option B (amount of tokens). At the end of the experiment, if this decision situation is chosen for payout, the computer will randomly pick one question from the list and pay you the option you chose on that one question. Each question is equally likely to be chosen for payment. If you lie on any question, if that question gets chosen for
 payment, you will end up with the option you like less, so, <u>in your own interest, you should answer each question truthfully</u>.
     </p>
     <p>
