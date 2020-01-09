@@ -1,3 +1,4 @@
+session.addApp('training.jtt');
 session.addApp('block1_prefIntensity.jtt');
 session.addApp('block2_prob.jtt');
 session.addApp('block3_AorB.jtt');
@@ -72,14 +73,11 @@ session.decisionSituations = [
 
 session.participantStart = function(participant) {
     participant.payoffs = [];
-    let sequence = [0, 1, 2];    
+    let sequence = [1, 2, 3];    
     let x = Utils.shuffle(sequence);
-    let indexOf2 = x.indexOf(2);
-    x.splice(indexOf2+1, 0, 3);
-    x.push(4);
-    x.push(5);
-    x.push(6);
-    participant.appSequence = x;
+    let indexOf2 = x.indexOf(3);
+    x.splice(indexOf2+1, 0, 4);
+    participant.appSequence = [0, ...x, 5, 6, 7];
     let decSits = [];
     let revSits = [];
     for (let i in session.decisionSituations) {
