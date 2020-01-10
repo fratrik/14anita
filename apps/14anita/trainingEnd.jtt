@@ -1,0 +1,7 @@
+app.isStandaloneApp = false;
+app.groupSize = 1;
+
+let stage = app.newStage('trainingEnd');
+stage.activeScreen = `
+The experiment will start now. Please press OK to continue.
+`

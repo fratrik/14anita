@@ -1,4 +1,5 @@
 session.addApp('training.jtt');
+session.addApp('trainingEnd.jtt');
 session.addApp('block1_prefIntensity.jtt');
 session.addApp('block2_prob.jtt');
 session.addApp('block3_AorB.jtt');
@@ -31,7 +32,7 @@ session.decisionSituations = [
         optionA: {
             text: '[12 tokens today, 88 tokens in two weeks]',
             filename: 'TP A.png',
-            description: '“a timed payment as described below',
+            description: 'a timed payment as described below',
         },
         optionB: {
             text: '[68 tokens today, 20 tokens in two weeks]',
@@ -73,11 +74,13 @@ session.decisionSituations = [
 
 session.participantStart = function(participant) {
     participant.payoffs = [];
-    let sequence = [1, 2, 3];    
+
+    let sequence = [2, 3, 4];    
     let x = Utils.shuffle(sequence);
-    let indexOf2 = x.indexOf(3);
-    x.splice(indexOf2+1, 0, 4);
-    participant.appSequence = [0, ...x, 5, 6, 7];
+    let indexOf2 = x.indexOf(4);
+    x.splice(indexOf2+1, 0, 5);
+    participant.appSequence = [0, 1, ...x, 6, 7, 8];
+
     let decSits = [];
     let revSits = [];
     for (let i in session.decisionSituations) {

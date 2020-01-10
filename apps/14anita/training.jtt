@@ -21,7 +21,7 @@ app.s1questions = [
     },
     {
         text: "If you enter 96, you prefer Option B.",
-        answer: "true"
+        answer: "false"
     },
     {
         text: "If you prefer Option B twice as much as Option A, you should enter 33.",
@@ -89,6 +89,7 @@ app.html = `
                 }
             }
             gotoScreen = function(id) {
+                Vue.delete(jt.vue.player, 'hasErrors');
                 jt.vue.player.stage.id = id;
                 $('body').find(':input').removeAttr('checked').not(':button, :submit, :reset, :radio, :checkbox').val('');
             }
@@ -102,7 +103,7 @@ app.html = `
                 if (Math.floor(val) != val) {
                     val = -1;
                 }
-                jt.vue.player.switchRow = val;
+                Vue.set(jt.vue.player, 'switchRow', val);
                 if (val != -1) {
                     $('#switchRow').val(val);
                 }
@@ -362,7 +363,7 @@ questions at or after your switch point).
     tokens
 
     <br><br>
-    <button type='button' onclick='gotoScreen("screen3")' :disabled='player.hasErrors == null || player.hasErrors'>OK</button>
+    <button type='button' onclick='gotoScreen("screen3")' :disabled='(player.hasErrors == null || player.hasErrors) || !(player.switchRow != "" && player.switchRow >= 1 && player.switchRow <= 200)'>OK</button>
 
 </div>
 <br>
