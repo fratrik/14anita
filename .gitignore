@@ -2,3 +2,4 @@
 internal/serverState.json
 internal/logs
 sessions
+internal/clients/shared/shared.js
