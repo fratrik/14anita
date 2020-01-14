@@ -51,7 +51,14 @@ The researchers conducting this experiment assume that you will choose Option A 
             <td>{{key === "&#8942;" ? "&#8942;" : "Would you rather have:"}}</td>
             <td>{{key === "&#8942;" ? "&#8942;" : player.option.text}}</td>
             <td>{{key === "&#8942;" ? "&#8942;" : "or"}}</td>
-            <td :style='key === "&#8942;" ? "" : "text-align: left"'>{{key === "&#8942;" ? "&#8942;" : (key + (key === 1 ? " token" : " tokens") + " for sure")}}
+            <td 
+                :style='key === "&#8942;" ? "" : "text-align: left"'
+            >
+                {{
+                    key === "&#8942;" ? "&#8942;" : (
+                        key + (key === 1 ? " token" : " tokens") + player.situation.prefIntText
+                    )
+                }}
             </td>
         </tr>
     </table>
