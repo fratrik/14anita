@@ -59,7 +59,7 @@ app.initPlayer = function(player) {
 
 let intro = app.newStage('intro');
 intro.activeScreen = `
-    <p>Please click OK to proceed to the next stage of the experiment.</p>
+    <p>Please click OK to proceed to the next round of the experiment.</p>
 `;
 intro.canPlayerParticipate = function(player) {
     app.initPlayer(player);
@@ -81,8 +81,8 @@ stage.playerEnd = function(player) {
 stage.activeScreen = `
 <p>{{ app.periodText }}: {{player.curPeriod}}/{{app.session.repsForBlock3}}</p>
 
-<p v-show='player.curPeriod==1'>In this stage you will choose between the same option A and option B {{app.session.repsForBlock3}} times in a row.  Note that there are no right or wrong answers for any of these questions.</p>
-<p v-show='player.curPeriod==1'>If this question is selected for payout, one of the {{app.session.repsForBlock3}} choices will be randomly selected and you will be paid out according to your choice.</p>
+<p v-show='player.curPeriod==1'>In this round you will choose between the same option A and option B {{app.session.repsForBlock3}} times in a row.  Note that there are no right or wrong answers for any of the questions.</p>
+<p v-show='player.curPeriod==1'>If this round is selected for payout, one of the {{app.session.repsForBlock3}} questions will be randomly selected and you will be paid out according to your choice.</p>
 <p>There are two options: option A and option B which you see below (each option is {{player.situation.descAB}}). Which option do you prefer?</p>
 <p>Please select option A or option B and click OK.</p>
 <div style='display: flex; align-items: center; font-size: 24pt'>

@@ -45,12 +45,12 @@ session.decisionSituations = [
         name: 'ChocolateBars',
         showImageForPrefInt: true,
         optionA: {
-            text: 'Chocolate bar 1',
+            text: 'Chocolate bar',
             filename: 'CH A.jpg',
             description: 'a chocolate bar as displayed below',
         },
         optionB: {
-            text: 'Chocolate bar 2',
+            text: 'Chocolate bar',
             filename: 'CH B.jpg',
             description: 'a chocolate bar as displayed below',
         },
@@ -69,6 +69,7 @@ session.decisionSituations = [
             filename: 'EL B.png',
             description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
         },
+        descAB: 'a lottery with 4 potential outcomes, each outcome being equally likely',
     }
 ]
 
