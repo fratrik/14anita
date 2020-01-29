@@ -211,7 +211,8 @@ stage.autoplay = `
 `;
 
 let results = app.newStage('results');
-results.duration = 1000;
+results.addOKButtonIfNone = false;
+results.clientDuration = 1;
 results.activeScreen = `
 <p>You chose:</p>
 <div style='display: flex; align-items: center; font-size: 24pt'>
