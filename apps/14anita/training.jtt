@@ -8,24 +8,24 @@ app.modifyPathsToIncludeId = false;
 
 app.s1questions = [
     {
-        text: "If you enter 50, you are indifferent between the two options.",
-        answer: "true"
+        text: "If you enter 100, what is the probability that your payoff is over 100 tokens?",
+        answer: "50"
     },
     {
-        text: "If you have no preference for Option A, you should enter 0.",
-        answer: "true"
+        text: "If you enter 20, what is the probability with which Option B is selected?",
+        answer: "80"
     },
     {
-        text: "If you enter 22, you prefer Option B.",
-        answer: "true"
+        text: "If you enter 50, what is the probability that the payout will be at least 40 tokens?",
+        answer: "75"
     },
     {
-        text: "If you enter 96, you prefer Option B.",
-        answer: "false"
+        text: "If you enter 0, what is the probability that the payoff from the selected lottery is 90 tokens?",
+        answer: "50"
     },
     {
-        text: "If you prefer Option B twice as much as Option A, you should enter 33.",
-        answer: "true"
+        text: "If you enter 30, what is the probability with which Option A is selected?",
+        answer: "30"
     },  
 ];
 app.s2questions = [
@@ -70,22 +70,37 @@ app.html = `
                 Vue.set(jt.vue.player, "hasErrors", false);
                 for (let i in jt.vue.app[screenId + "questions"]) {
                     let q = jt.vue.app[screenId + "questions"][i];
-                    let radios = document.getElementsByName(screenId + 'q' + i);
-                    q.selection = '';
-                    for (let j in radios) {
-                        if (radios[j].checked) {
-                            q.selection = radios[j].value;
-                            break;
+                    if (screenId === 's1') {
+                        let el = document.getElementById(screenId + 'q' + i);
+                        q.selection = el.value;
+                        Vue.set(q, 'hasError', false);
+                        if (q.selection != q.answer) {
+                            // q.hasError = true;
+                            jt.vue.player.hasErrors = true;
                         }
-                    }
-                    Vue.set(q, 'hasError', false);
-                    if (q.selection != q.answer) {
-                        q.hasError = true;
-                        jt.vue.player.hasErrors = true;
+                    } else if (screenId === 's2') {
+                        let radios = document.getElementsByName(screenId + 'q' + i);
+                        q.selection = '';
+                        for (let j in radios) {
+                            if (radios[j].checked) {
+                                q.selection = radios[j].value;
+                                break;
+                            }
+                        }
+                        Vue.set(q, 'hasError', false);
+                        if (q.selection != q.answer) {
+                            q.hasError = true;
+                            jt.vue.player.hasErrors = true;
+                        }
                     }
                 }
                 if (!jt.vue.player.hasErrors) {
                     jt.popupMessage('All of your answers are correct.');
+                    if (jt.vue.player.correctFirstTry[screenId] == null) {
+                        jt.vue.player.correctFirstTry[screenId] = true;
+                    }
+                } else {
+                    jt.vue.player.correctFirstTry[screenId] = false;
                 }
             }
             gotoScreen = function(id) {
@@ -169,6 +184,7 @@ let intro = app.newStage('intro');
 intro.playerStart = function(player) {
     player.allowOK = false;
     player.curPeriod = 1;
+    player.correctFirstTry = { s1: null, s2: null};
 }
 
 intro.activeScreen = `
@@ -178,6 +194,8 @@ intro.activeScreen = `
 <p>The purpose of the training phase it to familiarize yourself with the
 different types of questions in the experiment. You can click through
 the questions as often as you like.</p>
+
+<p>Of those participants who complete the comprehension questions correctly <u>on the first try</u>, one participant will be randomly selected and paid an additional 5 Euro at the end of this session.</p>
 
 <p>If you have any questions during the training phase, please raise your
 hand and an experimenter will come to you.</p>
@@ -198,27 +216,24 @@ screen1.activeScreen = `
 
 <p><b>Please enter your preferred probability for Option A in the decision-lottery in the field below.</b></p>
 
-<p><b>Before you do that, please answer the following understanding questions:</b></p>
+<p><b>Before you do that, please answer the following comprehension questions:</b></p>
 
 <div 
     v-for='(question, index) in app.s1questions' 
     style='display: flex; margin-bottom: 0.5rem;'
     :class='{ haserror: question.hasError }'
 >
-    <span style='width: 620px'>{{question.text}}</span>
+    <span style='width: 800px'>{{question.text}}</span>
     <span style='margin-right: 1.2rem;'>
-        <input type='radio' :name='"s1q" + index' :id='"s1q" + index + "true"' value='true'>
-        <label :for='"s1q" + index + "true"'>True</label>
-    </span>
-    <span>
-        <input type='radio' :name='"s1q" + index' :id='"s1q" + index + "false"' value='false'>
-        <label :for='"s1q" + index + "false"'>False</label>
+        <input type='number' :id='"s1q" + index' min=0 max=100>%
     </span>
 </div>
 
 <div class='haserror' id='errorMsg' v-show='player.hasErrors'>Please read the instructions again and check your answers.</div>
 
 <button type='button' onclick='checkAnswers("s1")'>Check answers</button>
+
+<p><b>You can now enter your (hypothetically) preferred probability for Option A in the decision-lottery in the field below.</b></p>
 
 <div style='display: flex; width: 100%; font-size: 18pt; margin-bottom: 2rem'>
     <span style='flex: 1 0 500px; display: flex; flex-direction: column; align-items: center;'>
@@ -443,8 +458,8 @@ following:</p>
 <span>Your choices were: <span style='font-size: 24pt'>{{player.s3letters}}</span></span>
 <p>Below you have the option to revise your choices or to keep your choices the same. For example, if you click on "All A" ("All B") below, all previous choices for the {{app.numRepsScreen3}} questions you made will not be considered for payout but instead the computer will calculate payout as if you chose option A (option B) in all {{app.numRepsScreen3}} questions.</p>
 <div>
-    <button tabindex='-1' type='button' onclick='gotoScreen("finished")' v-show='player.selectedOptionLetter !== "A".repeat(app.numRepsScreen3)'>All A</button>
-    <button tabindex='-1' type='button' onclick='gotoScreen("finished")' v-show='player.selectedOptionLetter !== "B".repeat(app.numRepsScreen3)'>All B</button>
+    <button tabindex='-1' type='button' onclick='gotoScreen("finished")' v-show='player.s3letters !== "A".repeat(app.numRepsScreen3)'>All A</button>
+    <button tabindex='-1' type='button' onclick='gotoScreen("finished")' v-show='player.s3letters !== "B".repeat(app.numRepsScreen3)'>All B</button>
     <button tabindex='-1' type='button' onclick='gotoScreen("finished")'>No changes</button>
 </div>
 `;
