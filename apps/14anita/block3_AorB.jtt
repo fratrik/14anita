@@ -180,9 +180,6 @@ img {
     cursor: pointer;
     border: 4px solid rgba(0, 0, 255, 0.5);
 }
-img.selectable::before {
-    display: none;
-}
 .selected {
     border: 4px solid blue;
 }
@@ -221,5 +218,5 @@ results.activeScreen = `
         Option {{ player.selectedOptionLetter }}
     </div>
 </div>
-`
+`;
 
