@@ -22,8 +22,8 @@ app.s1questions = [
         answer: "50"
     },
     {
-        text: "If you enter 30, what is the probability with which Option A is selected?",
-        answer: "30"
+        text: "If you enter 0, what is the probability that the payoff from the selected lottery is 50 tokens?",
+        answer: "50"
     },  
 ];
 app.s2questions = [
