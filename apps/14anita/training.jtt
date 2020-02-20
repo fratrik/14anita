@@ -19,7 +19,7 @@ app.s1questions = [
     },
     {
         text: "If you enter 0, what is the probability that the payoff from the selected lottery is 90 tokens?",
-        answer: "50"
+        answer: "0"
     },
     {
         text: "If you enter 0, what is the probability that the payoff from the selected lottery is 50 tokens?",
