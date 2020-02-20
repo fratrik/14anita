@@ -288,7 +288,7 @@ screen1.activeScreen = `
 
 <div style='display: flex; width: 100%; font-size: 18pt; margin-bottom: 2rem'>
     <span style='flex: 1 0 500px; display: flex; flex-direction: column; align-items: center;'>
-        <img src='14anita/images/trainingA.png'>
+        <img src='14anita/images/trainingA.jpg'>
         <span><b>Option A</b></span>
         <span style='display: flex'>
             <span>will be selected with&nbsp;</span>
@@ -307,7 +307,7 @@ screen1.activeScreen = `
     </span>
     <span style='flex: 1 1 200px'></span>
     <span style='flex: 1 0 500px; display: flex; flex-direction: column; align-items: center;'>
-        <img src='14anita/images/trainingB.png'>
+        <img src='14anita/images/trainingB.jpg'>
         <span><b>Option B</b></span>
         <span>
             will be selected with
@@ -454,13 +454,13 @@ likely). Which option do you prefer?</p>
 <div style='display: flex; align-items: center; font-size: 24pt'>
 <div style='flex: 1 0 auto; display: flex; align-items: center; flex-direction: column; justify-content: center; position: relative'>
         <div class='blocker'></div>
-        <img class='choice' src='14anita/images/trainingA.png' width=600 onclick='selectOption(this)' data-optionletter='A'>
+        <img class='choice' src='14anita/images/trainingA.jpg' width=600 onclick='selectOption(this)' data-optionletter='A'>
         Option A
     </div>
     <div style='width: 100px'></div>
     <div style='flex: 1 0 auto; display: flex; align-items: center; flex-direction: column; justify-content: center; position: relative'>
         <div class='blocker'></div>
-        <img class='choice' src='14anita/images/trainingB.png' width=600 onclick='selectOption(this)' data-optionletter='B'>
+        <img class='choice' src='14anita/images/trainingB.jpg' width=600 onclick='selectOption(this)' data-optionletter='B'>
         Option B
     </div>
 </div>
@@ -501,7 +501,7 @@ s3Results.activeScreen = `
 <p>You chose:</p>
 <div style='display: flex; align-items: center; font-size: 24pt'>
     <div style='flex: 1 0 auto; display: flex; align-items: center; flex-direction: column; justify-content: center; position: relative'>
-        <img :src='"14anita/images/" + (player.s3curLetter === "A" ? "trainingA.png" : "trainingB.png")' width=600>
+        <img :src='"14anita/images/" + (player.s3curLetter === "A" ? "trainingA.jpg" : "trainingB.jpg")' width=600>
         Option {{ player.selectedOptionLetter }}
     </div>
 </div>
@@ -514,11 +514,11 @@ following:</p>
 <p>Previously you made {{app.numRepsScreen3}} consecutive choices between the following options:</p>
 <div style='display: flex; align-items: center; font-size: 24pt'>
     <div style='flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; margin: 50px'>
-        <img src='14anita/images/trainingA.png' width='600'>
+        <img src='14anita/images/trainingA.jpg' width='600'>
         <p>Option A</p>
     </div>
     <div style='flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; margin: 50px'>
-        <img src='14anita/images/trainingB.png' width='600'>
+        <img src='14anita/images/trainingB.jpg' width='600'>
         <p>Option B</p>
     </div>
 </div>
