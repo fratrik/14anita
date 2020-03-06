@@ -25,7 +25,7 @@ stage.playerStart = function(player) {
     }
     player.switchRow = '';
     if (player.period().id === 1) {
-        player.participant.latestPayoffs = [];
+        player.participant.block1Payoffs = [];
     }
 }
 stage.activeScreen = `
@@ -138,21 +138,14 @@ jt.connected = function() {
 stage.playerEnd = function(player) {
     player.draw = Math.floor(Math.random()*(201));
     if (player.draw > player.switchRow) {
-        player.payoff = Math.floor(player.draw) + ' tokens';
+        player.payoff = {
+            text: Math.floor(player.draw) + ' tokens'
+        };
     } else {
-        player.payoff = player.option.text;
+        player.payoff = player.option;
     }
 
-    player.participant.latestPayoffs.push(player.payoff);
-    if (player.period().id == app.numPeriods) {
-        let round = Utils.randomInt(0, app.numPeriods);
-        let drawnPayoff = player.participant.latestPayoffs[round];
-        player.participant.payoffs.push({
-            round: round,
-            payoff: drawnPayoff,
-            block: 'Block 1 Pref. Int.'
-        });
-    }
+    player.participant.block1Payoffs.push(player.payoff);
 }
 
 stage.autoplay = `

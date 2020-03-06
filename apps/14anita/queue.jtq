@@ -6,22 +6,24 @@ session.addApp('block3_AorB.jtt');
 session.addApp('block4_reviewAorB.jtt');
 session.addApp('block2_prob.jtt');
 session.addApp('results.jtt');
-session.addApp('thankyou.jtt');
+// session.addApp('thankyou.jtt');
 
 session.repsForBlock3 = 20;
-
+session.trainingPrizeEUR = 5;
+session.tokensPerEUR = 10;
+session.block4NumRevisions = 2;
 session.decisionSituations = [
     {
         name: 'HardLottery',
         showImageForPrefInt: false,
         optionA: {
             text: '[20, 20, 180, 180]',
-            filename: 'HL A.png',
+            filename: 'HL1.png',
             description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
         },
         optionB: {
             text: '[64, 90, 90, 112]',
-            filename: 'HL B.png',
+            filename: 'HL2.png',
             description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
         },
         descAB: 'a lottery with 4 potential outcomes, each outcome being equally likely',
@@ -32,12 +34,12 @@ session.decisionSituations = [
         showImageForPrefInt: false,
         optionA: {
             text: '[12 tokens today, 88 tokens in two weeks]',
-            filename: 'TP A.png',
+            filename: 'TP1.png',
             description: 'a timed payment as described below',
         },
         optionB: {
             text: '[68 tokens today, 20 tokens in two weeks]',
-            filename: 'TP B.png',
+            filename: 'TP2.png',
             description: 'a timed payment as described below',
         },
         descAB: 'a timed payment',
@@ -48,12 +50,12 @@ session.decisionSituations = [
         showImageForPrefInt: true,
         optionA: {
             text: 'Chocolate bar',
-            filename: 'CH A.jpg',
+            filename: 'CH1.jpg',
             description: 'a chocolate bar as displayed below',
         },
         optionB: {
             text: 'Chocolate bar',
-            filename: 'CH B.jpg',
+            filename: 'CH2.jpg',
             description: 'a chocolate bar as displayed below',
         },
         descAB: 'a chocolate bar',
@@ -64,12 +66,12 @@ session.decisionSituations = [
         showImageForPrefInt: false,
         optionA: {
             text: '[94, 94, 94, 94]',
-            filename: 'EL A.png',
+            filename: 'EL1.png',
             description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
         },
         optionB: {
             text: '[94, 94, 96, 96]',
-            filename: 'EL B.png',
+            filename: 'EL2.png',
             description: 'a lottery with 4 potential outcomes, each outcome being equally likely',
         },
         descAB: 'a lottery with 4 potential outcomes, each outcome being equally likely',
@@ -80,11 +82,16 @@ session.decisionSituations = [
 session.participantStart = function(participant) {
     participant.payoffs = [];
 
+    // Shuffle blocks 1, 2 and 3
     let sequence = [1, 2, 3];    
     let x = Utils.shuffle(sequence);
+
+    // Insert block 4 after block 3
     let indexOf2 = x.indexOf(3);
     x.splice(indexOf2+1, 0, 4);
-    participant.appSequence = [0, ...x, 5, 6, 7];
+
+    // Add training (0), block 2 repeat (5), results (6)
+    participant.appSequence = [0, ...x, 5, 6];
 
     let decSits = [];
     let revSits = [];
@@ -94,7 +101,7 @@ session.participantStart = function(participant) {
     }
     participant.decSitSequence = Utils.shuffle(decSits);
     participant.reviewSequence = Utils.shuffle(revSits);
-    participant.reviewSequence.splice(2, 1);
+    participant.reviewSequence.splice(session.block4NumRevisions, 1);
     participant.decSitABSeq = [];
     for (let i in participant.decSitSequence) {
         participant.decSitABSeq.push(Math.random() < 0.5 ? 'AB' : 'BA');

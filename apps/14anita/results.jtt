@@ -1,13 +1,92 @@
 app.isStandaloneApp = false;
 app.groupSize = 1;
+app.modifyPathsToIncludeId = false;
 
 let stage = app.newStage('results');
 stage.playerStart = function(player) {
-    player.chosenBlock = Utils.randomInt(0, player.participant.payoffs.length);
-    player.points = player.participant.payoffs[player.chosenBlock].payoff;
+    let participant = player.participant;
+    player.chosenBlock = Utils.randomInt(0, 2 + participant.block3Payoffs.length + participant.block4Payoffs.length);
+
+    let list = null;
+    if (player.chosenBlock === 0) {
+        list = participant.block1Payoffs;
+    }
+
+    if (player.chosenBlock === 1) {
+        list = participant.block2Payoffs;
+    }
+
+    for (let i=0; i<participant.block3Payoffs.length; i++) {
+        if (player.chosenBlock === 2 + i) {
+            list = participant.block3Payoffs[i];
+        }
+    }
+
+    for (let i=0; i<participant.block4Payoffs.length; i++) {
+        if (player.chosenBlock === 2 + participant.block3Payoffs.length + i) {
+            list = participant.block4Payoffs[i];
+        }
+    }
+
+    player.chosenRound = Utils.randomInt(0, list.length);
+    player.payoff = list[player.chosenRound];
+
+    player.payoffEURNow = 0;
+    player.payoffEURLater = 0;
+    player.payoffChocBar = null;
+    if (participant.randomTrainingWinner) {
+        player.payoffEURNow += app.session.trainingPrize;
+    }
+
+    if (player.payoff.description == null) {
+        let numTokens = +player.payoff.text.split(' ')[0];
+        player.payoffEURNow += numTokens / app.session.tokensPerEUR;
+    } else if (player.payoff.description.startsWith('a lottery')) {
+        let array = JSON.parse(player.payoff.text);
+        player.chosenLotteryOutcome = Utils.randomInt(0, array.length);
+        player.payoffEURNow += array[player.chosenLotteryOutcome] / app.session.tokensPerEUR;
+    } else if (player.payoff.description.startsWith('a timed')) {
+        let numTokensNow = +player.payoff.text.split(' ')[0].replace('[', '');
+        let numTokensLater = +player.payoff.text.split(' ')[3].replace('[', '');
+        player.payoffEURNow += numTokensNow / app.session.tokensPerEUR;
+        player.payoffEURLater += numTokensLater / app.session.tokensPerEUR;
+    } else if (player.payoff.description.startsWith('a chocolate')) {
+        player.payoffChocBar = player.payoff.filename;
+    }
+
 }
+
+stage.addOKButtonIfNone = false;
+
 stage.activeScreen = `
     <h4>End</h4>
-    <p>The computer has now randomly determined your payoff for this experiment. Your payoff is: {{player.points}}.</p>
+    <p>The computer has now randomly determined your payoff for this experiment.</p>
+    <p v-if='participant.allCorrectFirstTry'>You answered all of the training questions correctly on your first try. You were <span v-if='!participant.randomTrainingWinner'>not</span> the randomly drawn winner from the training phase.</p>
+    <p v-else>You did not answer all of the training questions correctly on your first try.</p>
+    <div>
+        <div>Your payoff for this experiment is:</div>
+        <br>
+        <div>EUR now: {{player.payoffEURNow}}</div>
+        <div>EUR in 2 weeks: {{player.payoffEURLater}}</div>
+        <div>Chocolate bar: {{player.payoffChocBar == null ? 'None' : ''}}</div>
+        <img v-if='player.payoffChocBar != null' :src='"14anita/images/" + player.payoffChocBar'>
     <br>
+    <div style='display: none'>
+        <h2>Block 1</h2>
+        <div v-for='(p, index) in participant.block1Payoffs' :key='"1B" + index'>
+            {{ JSON.stringify(p) }}
+        </div>
+        <h2>Block 2</h2>
+        <div v-for='(p, index) in participant.block2Payoffs' :key='"2B" + index'>
+            {{ JSON.stringify(p) }}
+        </div>
+        <h2>Block 3</h2>
+        <div v-for='(p, index) in participant.block3Payoffs' :key='"3B" + index'>
+            {{ JSON.stringify(p) }}
+        </div>
+        <h2>Block 4</h2>
+        <div v-for='(p, index) in participant.block4Payoffs' :key='"4B" + index'>
+            {{ JSON.stringify(p) }}
+        </div>
+    </div>
 `

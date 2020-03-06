@@ -25,7 +25,7 @@ app.html = `
 </html>
 `;
 
-let stage = app.newStage('hello');
+let stage = app.newStage('decide');
 stage.playerStart = function(player) {
     let sit = player.period().id-1;
     let situation = app.session.decisionSituations[player.participant.decSitSequence[sit]];
@@ -33,7 +33,7 @@ stage.playerStart = function(player) {
     player.situationName = situation.name;
     player.slider = -1;
     if (player.period().id === 1) {
-        player.participant.latestPayoffs = [];
+        player.participant.block2Payoffs = [];
     }
 }
 stage.activeScreen = `
@@ -127,19 +127,10 @@ stage.autoplay = `
 stage.playerEnd = function(player) {
     player.draw = Math.random()*100;
     if (player.draw <= player.slider) {
-        player.payoff = player.situation.optionA.text;
+        player.payoff = player.situation.optionA;
     } else {
-        player.payoff = player.situation.optionB.text;
+        player.payoff = player.situation.optionB;
     }
 
-    player.participant.latestPayoffs.push(player.payoff);
-    if (player.period().id == app.numPeriods) {
-        let round = Utils.randomInt(0, app.numPeriods);
-        let drawnPayoff = player.participant.latestPayoffs[round];
-        player.participant.payoffs.push({
-            round: round, 
-            payoff: drawnPayoff,
-            block: 'Block 2 Prob.'
-        });
-    }
+    player.participant.block2Payoffs.push(player.payoff);
 }
