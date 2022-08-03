@@ -4,7 +4,7 @@ session.addApp('block1_prefIntensity.jtt');
 session.addApp('block2_prob.jtt');
 session.addApp('block3_AorB.jtt');
 session.addApp('block4_reviewAorB.jtt');
-session.addApp('block2_prob.jtt');
+//session.addApp('block2_prob.jtt');
 session.addApp('results.jtt');
 // session.addApp('thankyou.jtt');
 
